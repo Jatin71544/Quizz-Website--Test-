@@ -16,18 +16,13 @@
       height: 100vh;
     }
 
-    #start-container,
-    #quiz-container,
-    #dashboard-container {
+    #quiz-container {
       background-color: #fff;
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      display: none;
     }
 
-    #rules-container,
     #question-container {
       font-size: 18px;
       margin-bottom: 20px;
@@ -52,57 +47,21 @@
       margin-bottom: 10px;
     }
 
-    #dashboard-graph {
-      width: 80%;
-      margin: auto;
-    }
-
     #score {
       font-size: 18px;
       font-weight: bold;
+      text-align: center;
       margin-top: 20px;
-    }
-
-    #menu-container {
-      margin-top: 20px;
-    }
-
-    #correct-answers {
-      cursor: pointer;
-      color: blue;
-      text-decoration: underline;
-    }
-
-    #message {
-      color: red;
-      font-weight: bold;
-      font-size: 20px;
     }
   </style>
 </head>
 <body>
 
-<div id="start-container">
-  <p>Welcome to the Mock Exam App</p>
-  <button onclick="showRules()">Start</button>
-</div>
-
 <div id="quiz-container">
-  <div id="timer">Time Remaining: <span id="time">3600</span> seconds</div>
+  <div id="timer">Time Remaining: <span id="time">60</span> seconds</div>
   <div id="question-container"></div>
   <div id="options-container"></div>
-  <button onclick="submitQuiz()">Submit</button>
-</div>
-
-<div id="dashboard-container">
-  <p>Final Dashboard:</p>
-  <div id="dashboard-graph"></div>
   <div id="score"></div>
-  <div>Total Wrong Questions: <span id="wrong-questions"></span></div>
-  <div id="menu-container">
-    <p>Menu:</p>
-    <div id="correct-answers" onclick="showCorrectAnswers()">View Correct Answers</div>
-  </div>
 </div>
 
 <script>
@@ -122,32 +81,8 @@
 
   let currentQuestionIndex = 0;
   let score = 0;
-  let wrongQuestions = 0;
-  let timeRemaining = 3600;
+  let timeRemaining = 60;
   let timerInterval;
-
-  function showRules() {
-    const startContainer = document.getElementById('start-container');
-    const message = document.getElementById('message');
-
-    startContainer.style.display = 'none';
-
-    const understood = confirm("By clicking 'OK', you agree to the common rules of conduct.");
-    if (understood) {
-      startQuiz();
-    } else {
-      message.innerText = 'You Dumb!';
-      message.style.display = 'block';
-    }
-  }
-
-  function startQuiz() {
-    const quizContainer = document.getElementById('quiz-container');
-    quizContainer.style.display = 'block';
-
-    startTimer();
-    showQuestion();
-  }
 
   function startTimer() {
     timerInterval = setInterval(() => {
@@ -156,7 +91,7 @@
 
       if (timeRemaining <= 0) {
         clearInterval(timerInterval);
-        submitQuiz();
+        showScore();
       }
     }, 1000);
   }
@@ -180,8 +115,6 @@
   function checkAnswer(selectedIndex) {
     if (questions[currentQuestionIndex].options[selectedIndex] === questions[currentQuestionIndex].correctAnswer) {
       score++;
-    } else {
-      wrongQuestions++;
     }
 
     currentQuestionIndex++;
@@ -189,42 +122,19 @@
     if (currentQuestionIndex < questions.length) {
       showQuestion();
     } else {
-      showDashboard();
+      showScore();
     }
   }
 
-  function submitQuiz() {
+  function showScore() {
     clearInterval(timerInterval);
-    showDashboard();
-  }
 
-  function showDashboard() {
-    const dashboardContainer = document.getElementById('dashboard-container');
-    const dashboardGraph = document.getElementById('dashboard-graph');
     const scoreContainer = document.getElementById('score');
-    const wrongQuestionsContainer = document.getElementById('wrong-questions');
-
-    // Show dashboard and hide quiz elements
-    dashboardContainer.style.display = 'block';
-    document.getElementById('timer').style.display = 'none';
-    document.getElementById('question-container').style.display = 'none';
-    document.getElementById('options-container').style.display = 'none';
-
-    // Calculate accuracy
-    const accuracy = (score / questions.length) * 100;
-
-    // Display numerical results
     scoreContainer.innerText = `Your Score: ${score}/${questions.length}`;
-    wrongQuestionsContainer.innerText = wrongQuestions;
-
-    // Display graphical representation of accuracy (simple bar graph)
-    dashboardGraph.innerHTML = `<div style="width:${accuracy}%; background-color: green; color: white;">Accuracy</div>`;
   }
 
-  function showCorrectAnswers() {
-    const correctAnswers = questions.map(question => question.correctAnswer);
-    alert(`Correct Answers:\n\n${correctAnswers.join('\n')}`);
-  }
+  startTimer();
+  showQuestion();
 </script>
 
 </body>
