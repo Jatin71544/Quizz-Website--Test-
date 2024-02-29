@@ -4,138 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mock Exam App</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    #quiz-container {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    #question-container {
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-
-    #options-container {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .option {
-      padding: 10px;
-      margin: 5px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #timer {
-      font-size: 16px;
-      text-align: right;
-      margin-bottom: 10px;
-    }
-
-    #score {
-      font-size: 18px;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 20px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-<div id="quiz-container">
-  <div id="timer">Time Remaining: <span id="time">60</span> seconds</div>
-  <div id="question-container"></div>
-  <div id="options-container"></div>
-  <div id="score"></div>
-</div>
+<body>  
+  <div id="start-container">
+   <p>Welcome to the Mock Exam App</p>
+   <button id="start-button">Start</button>
+  </div>
 
-<script>
-  const questions = [
-    {
-      question: 'What is the capital of France?',
-      options: ['Berlin', 'Madrid', 'Paris', 'Rome'],
-      correctAnswer: 'Paris'
-    },
-    {
-      question: 'Which planet is known as the Red Planet?',
-      options: ['Mars', 'Jupiter', 'Venus', 'Saturn'],
-      correctAnswer: 'Mars'
-    },
-    // Add more questions as needed
-  ];
+  <div id="quiz-container">
+   <div id="timer">Time Remaining: <span id="time">2 </span> hr</div>
+   <div id="question-container"></div>
+   <div id="options-container"></div>
+   <button id="submit-button">Submit</button>
+   <div id="score"></div>
+   <div> 
+    <button id="correct-answers">
+      Show correct Answers
+    </button>
+   </div>
+  </div>
 
-  let currentQuestionIndex = 0;
-  let score = 0;
-  let timeRemaining = 60;
-  let timerInterval;
-
-  function startTimer() {
-    timerInterval = setInterval(() => {
-      timeRemaining--;
-      document.getElementById('time').innerText = timeRemaining;
-
-      if (timeRemaining <= 0) {
-        clearInterval(timerInterval);
-        showScore();
-      }
-    }, 1000);
-  }
-
-  function showQuestion() {
-    const questionContainer = document.getElementById('question-container');
-    const optionsContainer = document.getElementById('options-container');
-
-    questionContainer.textContent = questions[currentQuestionIndex].question;
-    optionsContainer.innerHTML = '';
-
-    questions[currentQuestionIndex].options.forEach((option, index) => {
-      const optionElement = document.createElement('div');
-      optionElement.className = 'option';
-      optionElement.textContent = option;
-      optionElement.addEventListener('click', () => checkAnswer(index));
-      optionsContainer.appendChild(optionElement);
-    });
-  }
-
-  function checkAnswer(selectedIndex) {
-    if (questions[currentQuestionIndex].options[selectedIndex] === questions[currentQuestionIndex].correctAnswer) {
-      score++;
-    }
-
-    currentQuestionIndex++;
-
-    if (currentQuestionIndex < questions.length) {
-      showQuestion();
-    } else {
-      showScore();
-    }
-  }
-
-  function showScore() {
-    clearInterval(timerInterval);
-
-    const scoreContainer = document.getElementById('score');
-    scoreContainer.innerText = `Your Score: ${score}/${questions.length}`;
-  }
-
-  startTimer();
-  showQuestion();
-</script>
-
+  <script src="index.js"></script>
 </body>
 </html>
